@@ -1,0 +1,161 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- <a class="navbar-brand" href="#">EMPLOYEE DETAILS</a> -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="#">Features</a>
+      <a class="nav-item nav-link" href="#">Pricing</a>
+      <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+    </div>
+  </div>
+  <div class="search-hero">
+    <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+      placeholder="Search">
+  </div>
+</nav>
+<!-- View Modal-->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title">Employee Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="false">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body container">
+    <table class="table">
+      <thead>
+        <th>
+          ID
+        </th>
+        <th>
+          Name
+        </th>
+        <th>
+          Age
+        </th>
+        <th>
+          Salary
+        </th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{employeeDetail?.id}}
+          </td>
+          <td>
+            {{employeeDetail?.employee_name}}
+          </td>
+          <td>
+            {{employeeDetail?.employee_age}}
+          </td>
+          <td>
+            {{employeeDetail?.employee_salary}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+<!-- Update/Add Modal-->
+<ng-template #update>
+  <div class="modal-header">
+    <h4 class="modal-title">{{operationName}} Employee</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="false">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <br>
+    <div class="form-group">
+      <div class="col-md-12">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="tempEmployee.employee_name" formControlName="name" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+          <div *ngIf="f.name.errors.required">Name is required</div>
+          <div *ngIf="f.name.errors.pattern">only alphabets are allowed</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-12">
+        <label>AGE</label>
+        <input type="text" [(ngModel)]="tempEmployee.employee_age" formControlName="age" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.age.errors }" />
+        <div *ngIf="submitted && f.age.errors" class="invalid-feedback">
+          <div *ngIf="f.age.errors.required">age is required</div>
+          <div *ngIf="f.age.errors.pattern">Only Numeric Field Allowed</div>
+          <div *ngIf="f.age.errors.minlength">
+            Max age should not be more than 3 characters
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-12">
+        <label>SALARY</label>
+        <input type="text" formControlName="salary" [(ngModel)]="tempEmployee.employee_salary" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.salary.errors }" />
+        <div *ngIf="submitted && f.salary.errors" class="invalid-feedback">
+          <div *ngIf="f.salary.errors.required">salary is required</div>
+          <div *ngIf="f.salary.errors.pattern">Only Numeric Field Allowed</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-6">
+      <button class="btn btn-success">{{operationName}}</button>
+    </div>
+  </form>
+</ng-template>
+<!-- Header-->
+<h1 style="text-align: center;">Welcome!!</h1>
+<h2 style="text-align: center;">Employee Detail Page</h2>
+<div style="align-content: center; padding-left: 50px;" class="col-md-3">
+  <button (click)="openModal2(update, 0, 'Add')" class="btn btn-success">Add Employee</button>
+</div>
+<div class="container">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <th>
+        Name
+      </th>
+      <th>
+        View
+      </th>
+      <th>
+        Update
+      </th>
+      <th>
+        Delete
+      </th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of clientData | filter:searchText">
+        <td>
+          {{emp?.employee_name}}
+        </td>
+        <td (click)="openModal(template, emp?.id)">
+          <i class="fa fa-eye"></i>
+        </td>
+        <td (click)="openModal2(update, emp.id, 'update')">
+          <i class="fa fa-edit"></i>
+        </td>
+        <td (click)="delete(emp?.id)">
+          <i class="fa fa-trash"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- Footer-->
+<footer class="page-footer font-small blue pt-4">
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2021 Copyright:
+    <a href="https://mdbootstrap.com/">angular.co.in</a>
+  </div>
+  <!-- Copyright -->
+</footer>
